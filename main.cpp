@@ -149,14 +149,65 @@ public:
   PrintedBook(string title, string author, string isbn, float price,
               int quantity, float weight);
   float getWeight();
-  void setWeight();
+  void setWeight(float weight);
   virtual void Addbook() override;
   virtual void DisplayBook() override;
 };
+PrintedBook::PrintedBook() : Book() { weight = 0.0; }
+
+PrintedBook::PrintedBook(string title, string author, string isbn, float price,
+                         int quantity, float weight)
+    : Book(title, author, isbn, price, quantity) {
+  this->weight = weight;
+}
+
+float PrintedBook::getWeight() { return weight; }
+void PrintedBook::setWeight(float weight) { this->weight = weight; }
+
+void PrintedBook::Addbook() {
+  Book::Addbook();
+  cout << "Enter weight of book (kg): ";
+  cin >> weight;
+  cin.ignore(); //
+}
+
+void PrintedBook::DisplayBook() {
+  Book::DisplayBook();
+  cout << "Weight: " << weight << " kg" << endl;
+}
 
 int main() {
 
-  Ebook e;
-  e.Addbook();
-  e.DisplayBook();
+  int n;
+
+  cout << "Enter the number of books: ";
+  cin >> n;
+  cin.ignore();
+
+  Book *books[n];
+
+  for (int i = 0; i < n; ++i) {
+    int type;
+    cout << "Enter 1 for Ebook or 2 for PrintedBook: ";
+    cin >> type;
+    cin.ignore();
+
+    if (type == 1) {
+      books[i] = new Ebook();
+    } else if (type == 2) {
+      books[i] = new PrintedBook();
+    }
+
+    books[i]->Addbook();
+  }
+
+  for (int i = 0; i < n; ++i) {
+    books[i]->DisplayBook();
+    cout << "============================" << endl;
+  }
+  for (int i = 0; i < n; ++i) {
+    delete books[i];
+  }
+
+  return 0;
 }
